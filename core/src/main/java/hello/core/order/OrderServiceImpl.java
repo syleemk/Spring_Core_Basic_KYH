@@ -15,9 +15,21 @@ import hello.core.member.MemoryMemberRepository;
  */
 public class OrderServiceImpl implements OrderService{
 
-    private final MemberRepository memberRepository = new MemoryMemberRepository();
+    private final MemberRepository memberRepository;// = new MemoryMemberRepository();
+    /**
+     * 문제점 : OrderServiceImple은 주문 서비스에 관련된 책임만 가져야하는데
+     * 구체적인 할인 정책 정하는 책임까지 맡고있음 - 다양한 책임을 가짐 (단일책임원칙 위배)
+     * 마치 공연에서 배우가 직접 상대배역을 맡을 배우 초빙하는 것과 같은꼴
+     */
 //    private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
-    private final DiscountPolicy discountPolicy = new RateDiscountPolicy();
+    private final DiscountPolicy discountPolicy;// = new RateDiscountPolicy();
+
+    // 생성자를 통한 의존성 주입 -> 더이상 구체 클래스에 의존하지 않음
+    // 오로지 추상(인터페이스)에만 의존 -> DIP 준수
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
