@@ -6,6 +6,8 @@ import hello.core.discount.RateDiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
 import hello.core.member.MemoryMemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 설계 잘되어있음
@@ -13,6 +15,7 @@ import hello.core.member.MemoryMemberRepository;
  * 그냥 discountPolicy에게 맡김 -> "단일책임원칙" 잘 지켰다 볼 수 있음
  * 할인에 대한 변경일어나면, 할인부분만 고치면됨. 주문쪽까지 고칠필요 없음!!
  */
+@Component
 public class OrderServiceImpl implements OrderService{
 
     private final MemberRepository memberRepository;// = new MemoryMemberRepository();
@@ -24,6 +27,7 @@ public class OrderServiceImpl implements OrderService{
 //    private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
     private final DiscountPolicy discountPolicy;// = new RateDiscountPolicy();
 
+    @Autowired
     // 생성자를 통한 의존성 주입 -> 더이상 구체 클래스에 의존하지 않음
     // 오로지 추상(인터페이스)에만 의존 -> DIP 준수
     public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
